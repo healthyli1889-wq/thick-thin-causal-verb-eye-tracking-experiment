@@ -1,14 +1,5 @@
 # Four-scene eye-tracking pilot: procedure, quality control, and readiness
 
-Updated 2026-10-04. Program `pilot-2.6.0`, JSON schema `3.5.0`.
-
-What has been checked, what the fixes rest on, and what still cannot be signed off is in the [current acceptance checklist](docs/CHECKLIST.md).
-
-**A technical pilot can be run. This is not yet a confirmatory study.** Brown centre measurement, between-participant allocation, the critical-record checks, and the full analysis export are in place. A calibration score, the accuracy with which the two characters can actually be told apart, and the validity of the language materials are three different questions. Passing the software tests does not replace a session with a person at the camera.
-
-> **From v2.6 the accuracy rule is: measure, and do not stop the session.** Calibration and validation each run once at every checkpoint. Centre score, mean error, dispersion, the percentage of samples inside each point's ROI, and the sampling rate are all written into the file. **No score ends the session**, and the program no longer offers a recalibration retry. Values such as `brownMinimumScore: 75` are stored with each file as **reference levels**. They are not pass conditions.
->
-> **`complete: true` does not mean the tracking in that file was good enough.** Read `tracking_quality_gate` and `quality.tracking_quality` before treating a session as usable. Those fields hold `reference_levels_met`, `lowest_brown_score`, `lowest_validation_hz`, and the score at each checkpoint. Whether a low-accuracy trial is dropped is an **analysis** decision, made from those numbers. The collection program no longer makes it.
 
 ## 1. Starting a session and assigning a participant
 
