@@ -1,138 +1,138 @@
-# 四场景眼动研究：运行、质量控制与研究就绪状态
+# Four-scene eye-tracking pilot: procedure, quality control, and readiness
 
-更新：2026-10-04；程序 `pilot-2.6.0`，JSON schema `3.5.0`。
+Updated 2026-10-04. Program `pilot-2.6.0`, JSON schema `3.5.0`.
 
-逐项完成情况、修复证据和不能勾选的项目见 [当前验收清单](docs/CHECKLIST.md)。
+What has been checked, what the fixes rest on, and what still cannot be signed off is in the [current acceptance checklist](docs/CHECKLIST.md).
 
-**当前结论：可以开展技术预实验；尚不能标记为正式验证性研究就绪。** 已补上 Brown 中心测量、被试间分配、关键记录检查和完整分析导出。校准分数、真实角色识别精度、语言材料有效性是不同问题；软件测试不能代替真人验证。
+**A technical pilot can be run. This is not yet a confirmatory study.** Brown centre measurement, between-participant allocation, the critical-record checks, and the full analysis export are in place. A calibration score, the accuracy with which the two characters can actually be told apart, and the validity of the language materials are three different questions. Passing the software tests does not replace a session with a person at the camera.
 
-> **精度门槛政策（v2.6 起）：只测量，不拦截。** 校准与 validation 每个 checkpoint 各跑一次，所有数字（中心分数、平均误差、离散度、每点 ROI 百分比、采样率）全量写入数据，但**没有任何分数会中止 session**，也不再提供重校准重试。`brownMinimumScore: 75` 等阈值退化为写进每份数据的**参考比较值**，不是通过条件。
+> **From v2.6 the accuracy rule is: measure, and do not stop the session.** Calibration and validation each run once at every checkpoint. Centre score, mean error, dispersion, the percentage of samples inside each point's ROI, and the sampling rate are all written into the file. **No score ends the session**, and the program no longer offers a recalibration retry. Values such as `brownMinimumScore: 75` are stored with each file as **reference levels**. They are not pass conditions.
 >
-> 因此 **`complete: true` 不代表这份数据的追踪质量合格**。判断前必须读 `tracking_quality_gate` 和 `quality.tracking_quality`：那里有 `reference_levels_met`、`lowest_brown_score`、`lowest_validation_hz` 和逐个 checkpoint 的分数。排除低精度 trial 是**分析阶段**用这些数字做的决定，不再是采集阶段的决定。
+> **`complete: true` does not mean the tracking in that file was good enough.** Read `tracking_quality_gate` and `quality.tracking_quality` before treating a session as usable. Those fields hold `reference_levels_met`, `lowest_brown_score`, `lowest_validation_hz`, and the score at each checkpoint. Whether a low-accuracy trial is dropped is an **analysis** decision, made from those numbers. The collection program no longer makes it.
 
-## 1. 如何启动与分配被试
+## 1. Starting a session and assigning a participant
 
-在本目录运行：
+From this directory:
 
 ```sh
 npm run verify
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-用桌面 Chrome 打开 `http://127.0.0.1:8765/?allocation=1&v=2.6.0`。下一位使用分配表中的下一个编号。无编号的首页显示研究者入口；不要让被试自行选择编号。**完整流程预览**为 `http://127.0.0.1:8765/?allocation=1&mode=preview&v=2.6.0`，不请求摄像头、不执行校准门槛，可播放四视频、八次音频并完成问卷。页面始终标明 preview；下载文件以 `preview-` 开头，`mode=preview`、`gaze_enabled=false`、`complete=false`，成功走完时只标记 `flow_complete=true`。逐项材料预览为 `/preview.html`，本浏览器恢复页为 `/recovery.html`。摄像头需 localhost 或 HTTPS；运行环境必须允许加载该 WebGazer fork 所需模型。
+Open `http://127.0.0.1:8765/?allocation=1&v=2.6.0` in desktop Chrome. The next participant takes the next unused number on the roster. A URL with no number shows the researcher entry page. Participants should not choose their own number. The **full-flow preview** is `http://127.0.0.1:8765/?allocation=1&mode=preview&v=2.6.0`. It does not request the camera and does not apply a calibration cutoff. It plays the four videos and eight audio clips, then the questionnaire. The page stays labelled as a preview. Downloaded files begin with `preview-`, and the record has `mode=preview`, `gaze_enabled=false`, and `complete=false`. A preview that reaches the end sets only `flow_complete=true`. Item-level inspection is at `/preview.html`. Recovery for this browser is at `/recovery.html`. The camera needs localhost or HTTPS, and the runtime has to be allowed to load the models this WebGazer fork uses.
 
-[allocation-roster.csv](allocation-roster.csv) 提供 32 个预分配编号。每次填写匿名 participant_code、实际 session_id 和状态；身份信息另行保管。不要重复使用已发放编号；重测保留原记录并明确关联，剔除及补招规则预先确定。不同电脑共享同一份研究者分配表，浏览器没有中央招募锁。
+[allocation-roster.csv](allocation-roster.csv) holds 32 pre-assigned numbers. For each session, write an anonymous `participant_code`, the actual `session_id`, and a status. Keep names and other identifying information somewhere else. Do not reuse a number that has already been issued. A retest keeps the original row and is linked to it in writing. Decide the exclusion and replacement rules before recruitment starts. Several computers share one researcher roster. The browser has no central lock on who has been recruited.
 
-四个场景编号 A=path-break，B=car-bend，C=painting-crack，D=juice-split：
+The four scenes are A = path-break, B = car-bend, C = painting-crack, and D = juice-split.
 
-| List | 视频顺序 |
+| List | Video order |
 |---|---|
 | 1 | A B D C |
 | 2 | B C A D |
 | 3 | C D B A |
 | 4 | D A C B |
 
-这是 Williams balanced Latin square：每个视频在每个位置出现一次，每个有方向的相邻视频对出现一次。再与 standard/mirrored × 两种首词模式交叉，形成 16 个单元。每位被试两个场景 thick-first、两个 thin-first；完整 16 人分配周期内，每场景的首词与镜像均平衡。**分配平衡不等于完成样本平衡**：退出、失败和缺席后按单元报告人数，不能只检查总人数。生成额外空表可运行 `node scripts/allocation-roster.mjs new-roster.csv 64`，脚本拒绝覆盖已有文件。
+This is a Williams balanced Latin square. Each video appears once in each serial position, and each ordered pair of neighbouring videos appears once. Crossing the square with standard versus mirrored layout, and with the two first-word patterns, gives 16 cells. Each participant sees two scenes thick-first and two thin-first. Over a full cycle of 16 people, first-word order and mirroring are balanced inside every scene. **A balanced allocation is not a balanced completed sample.** After withdrawals, failures, and no-shows, report the count in each cell. A single total N is not the balance check. A blank roster of another size can be written with `node scripts/allocation-roster.mjs new-roster.csv 64`. The script will not overwrite a file that already exists.
 
-## 2. 每个阶段具体做哪些 QC
+## 2. What each stage records, and what a failure means
 
-| 阶段 | 实际实现与记录 | 失败处理／边界 |
+| Stage | What is implemented and stored | Failure handling and limits |
 |---|---|---|
-| 运行前 | `npm run verify` 检查媒体解码、四视频各 4.000 s／96 帧／24 fps、build manifest 中的 SHA-256；浏览器预载全部刺激 | 预载失败不进入任务。修改源文件后审查改动，再 `npm run build` 生成新版本指纹；manifest 不是运行时防篡改机制 |
-| 浏览器与同意流程 | 桌面 Chrome、webcam、至少 1280×720；请求全屏；记录浏览器、屏幕、viewport、DPR | 研究者需完成实际知情同意；技术入口不能代替伦理流程 |
-| 环境与声音 | 记录视力、眼镜、摄像头、距离、光线方向、耳机类型；完整播放中性词 seven 并作答 | 答错可调整后再试一次，再错停止。该步骤只检验基本可听性，不能证明八段研究音频的自然度 |
-| Calibration 训练 | 外围八个位置为一轮、每轮重新随机排序，共五轮（40 次，每次呈现点击一次）；随后中央位置连续点击五次，合计 45 次。新位置先等待 750 ms，点击间隔至少 300 ms；仅接收新鲜且不重复的眼部特征帧，并确认模型样本计数增加；记录坐标、时间、接受／拒绝理由；训练时显示预测点 | 每次重新训练；核对 45 个实际接收的训练样本；关闭全局鼠标移动训练。点击本身不是独立精度验证。外围点按轮次分散，因为同一目标连续点击共享头位与同一次注视，对 120 维 ridge 拟合几乎不增加信息。中央点放在最后是为了复刻 Brown `www/js/calibration.js`（Pt5 在其余八点完成后才出现，随即测量中央）——因此**中央分数偏向中央，不是无偏精度估计；五点 validation 才是**|
-| Brown 中心 measurement | 中央 + 注视 5 秒；预测做最近最多 4 点均值、边界限制；最后 50 点执行 Brown `calculatePrecision` 同一算式；保存原预测、平滑点、50 点输入、窗口尺寸和分数 | **不拦截。** 分数、平均误差、离散度全量记录，`pass` 字段仍按 ≥75 标注但不控制流程。75 是本研究的参考比较值，不是 Brown 官方标准；50 点不等于完整 5 秒的所有数据 |
-| 无点击 Validation（红点可见） | 五个目标各等待 1 s、采样 2 s；显示同一批原始预测的红点，不另开推理循环；从未平滑的原始坐标重算误差、偏移、MAD、频率；每点 ≥50% 落在 200 CSS px 内，且 ≥15 Hz | **不拦截，不重试。** 每点的 ROI 百分比、偏移、MAD、Hz 和失败原因全量记录；切页／失焦／改窗口照样标记为未达参考条件，但不中止。结束后显示实测分数并继续下一阶段 |
-| 每次词前 fixation | 1 s X；取后 80% 样本估计 x/y 中位偏移和 MAD；偏移不得超过 min(200 px, 两角色距离/2)，MAD ≤75 px，≥15 Hz | 不通过则不应用偏移校正；原始值保留。校正只平移 AOI，不把失败数据强行修成通过 |
-| 视频 | 原生 `playing/ended/waiting/stalled/error`、performance 时间、帧回调、丢帧计数；`ended` 结束 trial，不额外加 405 ms | 播放拒绝、错误、超时或时长不符停止；缓冲、丢帧、墙钟时长偏离一帧记为 QC 标记。媒体 4 s 不等于设备必然精确显示 4 s |
-| 图片＋音频注视 | 从首次 `playing` 开始记录 3 s；保存实际词、音频文件、播放事件、时长、是否 ended；记录 raw gaze、时间、viewport、AOI 和打断事件 | 启动失败、10 s 未开始或 3 s 内未播放完则停止；缓冲等使分析 QC 不通过。`playing` 是软件事件，不是已测量的耳机声学起点 |
-| 问题回答 | 记录完整题干、显示选项及顺序、选择的 distal/proximal、RT、condition、probe_id、场景位置和作答期间 raw gaze | 回答与 gaze 可按 probe_id 精确连接；问题页面没有物体 AOI，不将选项位置当作视频角色 AOI |
-| 结尾问卷 | Age、English background（native／near-native／additional language）、Major、Suggestions；lighting、calibration clarity、video naturalness、audio difficulty 四项各 1–7 | audio difficulty 保持负向措辞；仅凭此题不能认定注意力通过／失败。开头光照另存 lighting_setup，结尾存 lighting |
-| 中点与结束 | 两个视频后重复 Brown＋Validation，中点可重校；最后再测一次并保存末端质量 | 末端失败明确记录，不追溯性地把之前样本判为准确 |
-| 保存与完整性 | UUID、logical_id、开始／结束／分支 ledger；检查缺行、重复行、无开始或结束的行、session 不符、关键字段缺失、无效或逆序 gaze | `complete` 要求流程未停止且阶段记录、字段对应及连续采样完整性检查均通过。`complete=true` 仍不等于研究有效或下载已落盘 |
-| 恢复 | 每个 trial 前后写 IndexedDB；注视 trial 期间约每 1 s 保存 partial 快照；结束下载原始 JSON，可重下 | 崩溃可能丢失最后未提交的快照；部分记录标为 partial，不伪装成完整 trial。无远程后端；清理浏览器、隐私模式、存储失败均可能导致恢复不可用 |
+| Before the session | `npm run verify` checks that the media decode, that each of the four videos is 4.000 s / 96 frames / 24 fps, and that the SHA-256 values in the build manifest match. The browser preloads every stimulus. | A failed preload does not enter the task. After a source file changes, review the diff, then run `npm run build` so the version fingerprint is new. The manifest is not a runtime tamper check. |
+| Browser and consent | Desktop Chrome, a webcam, and at least 1280×720. The program requests fullscreen and records the browser, screen, viewport, and device pixel ratio. | The researcher still has to obtain real informed consent. The technical entry page is not an ethics procedure. |
+| Room and sound | Vision, glasses, camera, distance, light direction, and headphone type are recorded. The neutral word *seven* is played in full and the participant responds. | A wrong answer can be retried once after an adjustment. A second error stops the session. This step only checks that speech is basically audible. It does not show that the eight study recordings sound natural. |
+| Calibration training | Eight peripheral positions form one round and are reshuffled every round, for five rounds (40 clicks, one click per presentation). The centre is then clicked five times in a row, 45 clicks in all. A new position waits 750 ms, and clicks are at least 300 ms apart. Only a fresh, non-duplicate eye-feature frame is accepted, and only after the model's sample count has increased. Coordinates, times, and the accept or reject reason are stored. The predicted point is shown during training. | The model is trained again on every run. Confirm that 45 training samples were actually accepted. Mouse-movement training across the screen is off. A click is not, by itself, an independent accuracy test. Peripheral points are spread across rounds because repeated clicks on the same target share one head pose and one fixation, and add almost nothing to a 120-dimensional ridge fit. The centre comes last in order to follow Brown's `www/js/calibration.js`, where Pt5 appears only after the other eight points and the centre is measured immediately. **The centre score is therefore biased toward the centre. It is not an unbiased accuracy estimate. The five-point validation is.** |
+| Brown centre measurement | A central cross is fixated for 5 seconds. Predictions are averaged over at most the last four points and clamped to the screen. The last 50 points are scored with the same formula as Brown's `calculatePrecision`. Raw predictions, smoothed points, the 50-point input, window size, and the score are saved. | **The score does not stop the session.** Score, mean error, and dispersion are stored in full. The `pass` field is still marked at ≥75, but that mark does not control the procedure. 75 is this study's reference level, not an official Brown standard. Fifty points are not every sample from the 5 seconds. |
+| No-click validation (red dot visible) | Each of five targets waits 1 s and is then sampled for 2 s. The red dot is the same batch of raw predictions; there is no second inference loop. Error, offset, MAD, and rate are recomputed from the unsmoothed raw coordinates. The reference level is ≥50% of samples inside 200 CSS px at each point, and ≥15 Hz. | **Nothing is blocked and nothing is retried.** ROI percentage, offset, MAD, Hz, and the failure reason are stored for every point. A tab switch, a blur, or a resize is marked as missing the reference level, and the session continues. The measured scores are shown, and the next stage starts. |
+| Pre-word fixation | A 1 s X. The last 80% of samples estimate the median x/y offset and the MAD. Offset may not exceed min(200 px, half the distance between the two characters). MAD must be ≤75 px, and the rate ≥15 Hz. | If the check fails, the offset correction is not applied. The raw values stay in the file. A correction only shifts the AOI. It does not rewrite a failed sample into a pass. |
+| Video | Native `playing`, `ended`, `waiting`, `stalled`, and `error` events, performance time, frame callbacks, and a dropped-frame count. The trial ends on `ended`. No extra 405 ms is added. | A rejected play, an error, a timeout, or the wrong duration stops the session. Buffering, dropped frames, and a wall-clock duration off by one frame are QC flags. A 4 s media file is not a guarantee that the device displayed 4 s. |
+| Picture plus audio, with gaze | Recording starts at the first `playing` event and runs for 3 s. The actual word, audio file, playback events, duration, and whether the clip ended are saved, together with raw gaze, time, viewport, AOI, and interruptions. | Failure to start, no start within 10 s, or a clip that has not finished within 3 s stops the session. Buffering and similar events fail the analysis QC. `playing` is a software event. It is not a measured acoustic onset at the earphone. |
+| Question response | The full question text, the options as displayed and their order, the distal or proximal choice, RT, condition, `probe_id`, scene position, and raw gaze during the response are stored. | Response and gaze join on `probe_id`. The question page has no object AOI. The position of an option is not the video character's AOI. |
+| End questionnaire | Age, English background (native / near-native / additional language), major, and suggestions, plus lighting, calibration clarity, video naturalness, and audio difficulty, each on a 1–7 scale. | Audio difficulty stays negatively worded. That item alone cannot pass or fail attention. Lighting at the start is stored as `lighting_setup`. Lighting at the end is stored as `lighting`. |
+| Midpoint and end | After two videos, Brown measurement and validation run again. Recalibration is available at the midpoint. Both run once more at the end, and the final quality record is saved. | A failure at the end is recorded as such. Earlier samples are not retrospectively marked accurate. |
+| Save and completeness | UUID, `logical_id`, and a ledger of starts, ends, and branches. The check looks for missing rows, duplicate rows, rows with no start or no end, a mismatched session, missing critical fields, and gaze that is invalid or out of order. | `complete` requires that the procedure was not stopped and that the stage records, field correspondence, and continuous-sample integrity checks all passed. `complete=true` is still not scientific validity, and it is not proof that the download reached disk. |
+| Recovery | IndexedDB is written before and after each trial. During a gaze trial a partial snapshot is saved about once a second. At the end the raw JSON is downloaded and can be downloaded again. | A crash can lose the last snapshot that was not committed. Partial records are labelled `partial`. They are not presented as finished trials. There is no remote backend. Clearing the browser, private mode, or a storage failure can make recovery unavailable. |
 
-Brown 算法核对源是安装的 `../WebGazer-master/www/js/precision_calculation.js`。回归测试直接执行该官方函数，对 100 组相同输入逐组比较，分数一致。公式：
+The Brown formula was checked against the installed file `../WebGazer-master/www/js/precision_calculation.js`. The regression test calls that function directly and compares it, input by input, on 100 shared inputs. The scores match. The formula is:
 
 `round(mean(max(0, 100 − 100 × distance_to_center / (viewport_height / 2))))`
 
-**一致的是评分算式及本地实现的平滑／限界步骤；不声称两个程序的预测模型、采样时刻、完整 UI 或真实精度相同。** 本研究保留 [jsPsych 要求的兼容 fork](https://www.jspsych.org/v8/overview/eye-tracking/)，没有用下载的 Brown v3 bundle 直接替换。Brown 分数衡量中心距离，不是“90% 的 AOI 判断正确”。正式任务隐藏预测点及摄像头画面，保存坐标而非摄像头录像、GIF 或服务器录屏。
+**What matches is the scoring formula and the local smoothing and clamping steps.** The two programs are not claimed to share a prediction model, sampling times, a full interface, or real-world accuracy. This study keeps the [fork that jsPsych requires](https://www.jspsych.org/v8/overview/eye-tracking/). The downloaded Brown v3 bundle was not dropped in as a replacement. A Brown score is a distance from the centre. It is not "90% of AOI judgements were correct." During the real task the predicted point and the camera image are hidden. The file stores coordinates, not a camera recording, a GIF, or a server-side screen capture.
 
-## 3. 四场景、八段音频和问题的精确清单
+## 3. The four scenes, eight recordings, and questions
 
-**按用户最新明确要求核对：继续使用现有 bend、break、crack、split 四个 minimalist 几何无声视频。** 音频是独立的 `cause to X` 和 `X`，不改为完整句子。`materials` 中的人物视频是另一套文件，不能据此认定当前实验选错了材料；此前“必须接入人物原视频”的判断已撤回。文件来源和更正记录见 [材料核查](docs/MATERIALS-AUDIT-2026-10-03.md)。
+**Checked against the latest explicit instruction: keep the four existing silent geometric videos, bend, break, crack, and split.** The audio is the isolated phrase `cause to X` or `X`, not a full sentence. The person videos under `materials` are a different set of files. They are not evidence that the current experiment is using the wrong stimuli. The earlier conclusion that the original person videos had to be wired in is withdrawn. File sources and the correction are in the [materials audit](docs/MATERIALS-AUDIT-2026-10-03.md).
 
-以下文字是当前代码中的刺激定义及来源声明；媒体已检查可解码，**尚未完成对八段录音的独立逐字听审和词边界标注**。
+The table below is the stimulus definition currently in the code, plus the source statement. The media decode. **The eight recordings have not yet had an independent word-for-word listen-through, and their word boundaries have not been annotated.**
 
-| 场景 | thick 音频 → 问题 | thin 音频 → 问题 | distal／proximal 选项 |
+| Scene | Thick audio → question | Thin audio → question | Distal / proximal options |
 |---|---|---|---|
-| 栅栏 | `break` → Who broke the fence? | `cause to break` → Who caused the fence to break? | The green triangle／The red cube |
-| 路牌 | `bend` → Who bent the sign? | `cause to bend` → Who caused the sign to bend? | The blue car／The orange car |
-| 画作 | `crack` → Who cracked the painting? | `cause to crack` → Who caused the painting to crack? | The yellow triangle／The purple cube |
-| 饮料 | `split` → Who split the drink? | `cause to split` → Who caused the drink to split? | The teal capsule／The brown cube |
+| Fence | `break` → Who broke the fence? | `cause to break` → Who caused the fence to break? | The green triangle / The red cube |
+| Road sign | `bend` → Who bent the sign? | `cause to bend` → Who caused the sign to bend? | The blue car / The orange car |
+| Painting | `crack` → Who cracked the painting? | `cause to crack` → Who caused the painting to crack? | The yellow triangle / The purple cube |
+| Drink | `split` → Who split the drink? | `cause to split` → Who caused the drink to split? | The teal capsule / The brown cube |
 
-每场景播放一次 4.000 s 视频，之后两个 probe 各为 X fixation → 800 ms 图片预览 → 音频＋注视 → 书面问题＋两个选项＋作答。每个场景包含 thick、thin 各一次，先后顺序由分配表决定。视频显示 Scenario 1–4。初始 tracking gate 失败会跳过全部四场景；中点失败会跳过剩余场景，失败页显示中心分数和五点检查状态。
+Each scene plays one 4.000 s video. Two probes then follow. Each probe is an X fixation, an 800 ms picture preview, audio with gaze recording, and a written question with two options and a response. Every scene contains thick once and thin once. Which comes first is set by the roster. Videos are labelled Scenario 1–4. If the initial tracking check fails, all four scenes are skipped. If the midpoint check fails, the remaining scenes are skipped. The failure page shows the centre score and the status of the five-point check.
 
-每个场景从视频开始至第二次回答结束，单一采样器在后台持续运行，覆盖视频、X、图片、音频、回答和阶段切换。`continuous_gaze` 保存原始坐标、请求／接收时间、场景、phase 及 viewport；`continuous_segments` 保存场景开始／结束。切换时晚到的预测保留在连续记录，但不塞进下一阶段成为负时间样本。校准检查独立存储；无脸、推理失败或设备低速仍可能掉样，并不承诺生理意义的无间断测量。此处“后台”指浏览器本地后台，尚无远程数据上传服务器。音频目前是原有 Samantha 短语录音，问题不朗读。此顺序对应原需求中的“verb → question”；若希望听完整问题，需要统一修改材料、音频和词起点。饮料场景按用户指定保留 split。所有文件路径与实际文本定义见 [src/stimuli.js](src/stimuli.js)。
+From the start of the video until the second response, one sampler keeps running in the background. It covers the video, the X, the picture, the audio, the response, and the transitions. `continuous_gaze` stores raw coordinates, request and receipt times, scene, phase, and viewport. `continuous_segments` stores the start and end of each scene. A prediction that arrives late stays in the continuous record. It is not pushed into the next phase as a negative-time sample. Calibration checks are stored separately. A missing face, a failed inference, or a slow device can still drop samples. This is not a claim of physiologically continuous measurement. "Background" here means the browser, on this machine. There is no remote upload server. The audio is the existing Samantha phrase recordings. The questions are not spoken. The order matches the original request of verb, then question. Hearing the full question aloud would mean changing the materials, the audio, and the word onsets together. The drink scene keeps *split*, as specified. Paths and the literal text are in [src/stimuli.js](src/stimuli.js).
 
-## 4. 目前仍阻止正式研究的事项
+## 4. What still blocks a confirmatory study
 
-1. **角色 AOI 尚未验证。** 当前是依据近似中心划分的空间左右区域，不是物体轮廓；1280 px 显示宽度下两角色距离约 307、294、333、166 px。200 px 容差可能跨过角色中线，因此“200 ≤ 224”不能证明这些场景可分。需要重新安排更清楚的角色显示、核对实际投影坐标，并做注视各角色的独立识别验证。视频动态角色 AOI 尚未标注，视频 gaze 只输出连续坐标。
-2. **语言与时序尚未定稿。** 用户已确认 isolated `X`／`cause to X` 形式及 split；录音逐字听审和自然度尚未独立核验；每段关键词起点必须人工校对并记录标注来源。目前 `word_onset_ms=null`，不输出虚假的 word-locked 结果。蓝牙／声卡延迟和眼动模型延迟尚无硬件实测。
-3. **设计仍是四场景、同一场景两种条件。** Latin square 改善顺序平衡，但不能消除重复暴露、carryover 或只有四个 item 的推论限制。正式方案需决定是否每位被试每个 item 只出现一种条件、是否增加材料，以及预注册排除规则和按目标效应做功效模拟。
-4. **尚未有真人验证证据。** 自动测试使用模拟 tracker；需在拟使用的电脑、摄像头、眼镜和光照下测真实通过率、偏移、可分辨性、掉样与中断恢复。不能保证没有任何未知 bug，也不能保证每个被试的 gaze 都准确。
+1. **Character AOIs are not validated.** The current regions are left and right halves split near the approximate centres. They are not object outlines. At a 1280 px display width the two characters are about 307, 294, 333, and 166 px apart. A 200 px tolerance can cross the midline between them, so "200 ≤ 224" does not show that these scenes are separable. The characters need to be laid out more clearly, the projected coordinates need to be checked, and looks to each character need their own identification test. Dynamic character AOIs on the video have not been drawn. Video gaze is stored as a continuous coordinate stream.
+2. **The language and the timing are not final.** The isolated `X` / `cause to X` forms, and *split*, are confirmed. A word-for-word listen-through and a naturalness check of the recordings are not. The onset of the critical word in each clip has to be marked by hand, and the source of that annotation has to be recorded. `word_onset_ms` is currently `null`. The export does not invent word-locked results. Bluetooth or sound-card latency, and the eye-model latency, have not been measured on the hardware.
+3. **The design is still four scenes, with both conditions on the same scene.** The Latin square balances order. It does not remove repeated exposure, carryover, or the inferential limit of four items. A confirmatory protocol still has to decide whether each person sees each item in only one condition, whether more materials are needed, what the preregistered exclusion rules are, and what sample the target effect implies in a power simulation.
+4. **There is no evidence yet from a real participant.** The automated tests use a simulated tracker. Pass rate, offset, separability, sample loss, and crash recovery still have to be measured on the computer, camera, glasses, and lighting that will actually be used. Unknown bugs are not ruled out, and gaze is not guaranteed to be accurate for every participant.
 
-问卷变量能帮助发现质量关联，不能仅凭 self-report 判定某个环境因素“导致”失败。音频难度反向措辞也不能单独当作注意力测验。提前退出而没有经历的阶段，其评分保存为 null 并记录 exposure，不强迫被试评价未看过的视频／未听过的实验音频；预览没有校准，因此校准评分同样为 null。
+The questionnaire can show where quality and self-report travel together. A self-report cannot, on its own, establish that some feature of the room caused a failure. The reversed audio-difficulty item is not an attention test by itself. If someone leaves before a stage, that stage's rating is stored as null and the exposure is recorded. Participants are not asked to rate a video they did not see or study audio they did not hear. Preview has no calibration, so the calibration rating is null there as well.
 
-## 5. 最终数据为何能在 R／Python 分析
+## 5. Why the saved files can be analysed in R or Python
 
-原始 JSON 是审计主文件，保存完整结构、配置、分配、版本、构建指纹、媒体事件和未改写坐标。导出器不修改原文件，不静默删掉质量差的被试；无效样本保留并带标记，缺失值写为空字段，不能当 0。导出保留 preview 的模式标记；随附 R／Python 回答统计默认排除 `mode=preview` 与 `synthetic_test_data=true`，不得把预览当作受试者数据。
+The raw JSON is the audit file. It keeps the full structure, configuration, allocation, version, build fingerprint, media events, and coordinates that have not been rewritten. The exporter does not edit that file and does not quietly drop a participant with poor data. Invalid samples stay in the export, with a flag. Missing values are empty fields, not zeros. Preview keeps its mode flag. The accompanying R and Python response summaries exclude `mode=preview` and `synthetic_test_data=true` by default. A preview is not participant data.
 
 ```sh
 node analysis/export.mjs /path/to/session.json /path/to/derived
-# 或导出目录中多个独立 session JSON：
+# or several independent session JSON files in one directory:
 node analysis/export.mjs /path/to/raw-sessions /path/to/derived
 python3 analysis/describe.py /path/to/derived
 Rscript analysis/describe.R /path/to/derived
 ```
 
-| CSV | 分析用途／主键 |
+| CSV | What it is for, and its key |
 |---|---|
-| participants | 一行一 session；分配、版本、完成状态、环境、问卷。session_id 为主键；重测与真实 participant 的关联仍需研究者 roster |
-| trials | 所有阶段、题干、选项、回答、RT、音视频与 QC；session_id＋logical_id |
-| samples | 每条原始 gaze、source sample_index、x/y、Δx/Δy、时间、raw/corrected AOI、有效性；session_id＋logical_id＋sample_index |
-| continuous_samples | 跨阶段的场景原始注视流，包括作答；session_id＋sample_index。与 samples 重叠，不能合并后重复计数 |
-| windows | phase、corrected_phase、word_window、corrected_word_window；均值、SD、停留、缺失、质量状态；未验证词起点的窗口明确 unavailable |
-| bins | 100 ms 时间窗，用于探索时间过程；保留音频相对时间，不将 bin 当成真实采样帧 |
-| validation_points | 每次 validation 的每个目标质量，可按人／阶段汇总 |
-| events | 分支、开始／结束和窗口交互，定位跳过、中断与异常 |
-| partial_samples | 崩溃恢复中尚未完成的 gaze，独立保存，不混入完整 trial |
+| participants | One row per session: allocation, version, completion, environment, questionnaire. `session_id` is the key. Linking a retest to the real participant still depends on the researcher's roster. |
+| trials | Every stage, question text, options, response, RT, audio, video, and QC. Key: `session_id` + `logical_id`. |
+| samples | Each raw gaze sample, source `sample_index`, x/y, Δx/Δy, time, raw and corrected AOI, and validity. Key: `session_id` + `logical_id` + `sample_index`. |
+| continuous_samples | The raw gaze stream across phases of a scene, including the response. Key: `session_id` + `sample_index`. It overlaps `samples`. Do not stack the two tables and count the samples twice. |
+| windows | `phase`, `corrected_phase`, `word_window`, and `corrected_word_window`: mean, SD, dwell, missingness, and quality status. A window whose word onset was never verified is marked `unavailable`. |
+| bins | 100 ms time bins for exploring the time course. Time is relative to the audio. A bin is not a real sampling frame. |
+| validation_points | Quality at each validation target, on each validation. These can be summarised by person or by stage. |
+| events | Branches, starts, ends, and window interactions, for finding skips, interruptions, and anomalies. |
+| partial_samples | Gaze from a crash recovery that never became a finished trial. Stored apart from the complete trials. |
 
-CSV 为 UTF-8，时间字段有 ms/s 后缀，坐标为 CSS px；`x_signed_distal` 按实际角色中心标准化（distal=+1、proximal=−1、中线=0），不是屏幕中线；几何和复杂事件列保留 JSON 字符串，可用 Python `json` 或 R `jsonlite` 展开。导出拒绝重复 session_id，避免把原下载与恢复副本重复计入。原始 JSON 中还保留 Brown 50 点输入和 validation 原始数据，CSV 汇总并未取代它们。
+The CSVs are UTF-8. Time columns carry an `ms` or `s` suffix. Coordinates are CSS pixels. `x_signed_distal` is scaled to the actual character centres (distal = +1, proximal = −1, midline = 0), not to the middle of the screen. Geometry and complex event columns stay as JSON strings and can be expanded with Python `json` or R `jsonlite`. The export refuses a repeated `session_id`, so an original download and a recovery copy are not both counted. The raw JSON also keeps the 50 Brown scoring points and the raw validation samples. The CSV summaries do not replace them.
 
-当前合适的分析是**技术质量与描述统计**：通过／退出率、采样率、缺失率、条件内被试均值和回答比例。材料验证后，再预注册 trial-level gaze 分配的混合效应模型，以及二分类回答的 logistic mixed model；保留 subject/item/condition/order 结构。不能将几千个 gaze 点作为几千个独立被试进行 t 检验或 ANOVA。具体估计量、窗口和限制见 [METHODS-AND-TECH-SPEC.md](docs/METHODS-AND-TECH-SPEC.md)。
+What is appropriate now is **technical quality and description**: pass and withdrawal rates, sampling rate, missingness, within-condition participant means, and response proportions. After the materials are validated, preregister a mixed model of trial-level gaze allocation and a logistic mixed model of the binary choice, keeping the subject, item, condition, and order structure. Several thousand gaze samples are not several thousand independent participants, and they should not be entered that way into a t-test or an ANOVA. Estimands, windows, and limits are in [METHODS-AND-TECH-SPEC.md](docs/METHODS-AND-TECH-SPEC.md).
 
-## 6. 75 分门槛与 56 分排查（2026-10-03）
+## 6. The 75-point level, and the session that scored 56 (2026-10-03)
 
-门槛曾从 `>90` 改为 `≥80`；本次按要求改为 `≥75`，75 本身可通过；五点 validation 的 200 px／每点 50%／15 Hz 门槛保持不变。评分算式不变，降低门槛不会把 56 算成 75。
+The cutoff moved from `>90` to `≥80`, and was then set to `≥75`, so that 75 itself counts as meeting the level. The five-point validation criteria, 200 px, 50% at each point, and 15 Hz, were left as they were. The scoring formula did not change. Lowering the level does not turn a 56 into a 75.
 
-56 分意味着最后 50 个评分点相对屏幕中心的**平均截断距离约为窗口高度的 22%**（取整有误差）；例如高度为 1000 CSS px，则约 220 px。这里不是“56% 的样本正确”。需要原始记录才能判断是稳定偏移、抖动、跟踪丢失还是其他原因。
+A score of 56 means that the last 50 scoring points sat, on average, about **22% of the window height** from screen centre, after the truncation in the formula. Rounding adds a little error. At a height of 1000 CSS px that is about 220 px. It does not mean that 56% of samples were correct. The raw record is what distinguishes a stable offset, jitter, lost tracking, or something else.
 
-已修复：中心测量错误地恢复了 WebGazer 后台循环，造成其与 jsPsych 轮询并行；现在中心测量、validation 和任务使用暂停后台循环的单一轮询。校准训练只接收目标点击，移除鼠标轨迹训练；增加等待、新鲜帧检查和模型实际接收计数；校准点置于相对 viewport 的准确中心。
+What was fixed: centre measurement was wrongly restarting WebGazer's background loop, so that loop ran alongside the jsPsych poll. Centre measurement, validation, and the task now share one poll, and the background loop stays paused. Calibration training accepts only clicks on the targets. Mouse-path training is gone. The wait, the fresh-frame check, and a count of samples the model actually accepted were added. Calibration points sit at the true centre of the viewport.
 
-恢复页 `/recovery.html` 的 **Calibration diagnostics** 可查看分数复算、水平／垂直偏移、离散程度、样本量、训练接受数及每点 validation。原始文件也可运行 `node analysis/calibration-report.mjs session.json`。旧记录没有新加的训练接收计数时显示 null，不能事后宣称训练有效。
+On `/recovery.html`, **Calibration diagnostics** recomputes the score and shows horizontal and vertical offset, dispersion, sample size, the number of accepted training samples, and validation at each point. The same report can be run on a raw file with `node analysis/calibration-report.mjs session.json`. Older records lack the new accepted-training count and show null. They cannot be described, after the fact, as proof that training worked.
 
-本次尚未取得用户报告 56 分的对应原始 session，不能声称已确定该次低分的唯一原因；真人复测仍待完成。代码审查证据和测试见 [CALIBRATION-AUDIT-2026-10-03.md](docs/CALIBRATION-AUDIT-2026-10-03.md)。
+The raw session behind the reported score of 56 has not been obtained, so that low score does not yet have a single established cause. A retest with a person is still outstanding. The code review and the tests are in [CALIBRATION-AUDIT-2026-10-03.md](docs/CALIBRATION-AUDIT-2026-10-03.md).
 
-## 7. 红点与延迟（v2.3）
+## 7. The red dot, and latency (v2.3)
 
-红点是当前模型的预测。校准尚未完成时，模型只见过部分位置，红点偏离新目标不能直接当作最终精度。请看固定的深色目标点，不要追着红点训练；validation 记录无点击时的预测误差。按当前要求，validation 显示红点，数据明确标记 `gaze_feedback_visible=true` 和 `validation_context=visible-prediction-feedback`；可见反馈可能引导注视，不能描述为无反馈的独立验证。请始终看深色目标点。Brown 中心评分仍隐藏预测点。
+The red dot is the current model's prediction. Before calibration has finished, the model has only seen some of the positions, so a red dot that misses a new target is not the final accuracy. Watch the fixed dark target. Do not train by chasing the red dot. Validation records prediction error when the participant is not clicking. As currently specified, validation shows the red dot, and the data are marked `gaze_feedback_visible=true` and `validation_context=visible-prediction-feedback`. Visible feedback can pull gaze. It cannot be described as validation with no feedback. Keep looking at the dark target. The Brown centre score still hides the predicted point.
 
-本次修复了后台循环在暂停／恢复边界重复运行的风险，统一串行执行推理，并缓存未改变训练数据的回归系数。红点现在显示最新模型估计，不再额外平均最近四帧；超出屏幕的预测不伪装成边缘位置。去掉这层显示平滑可能使红点更抖，不能因此声称准确度提高。模型原有 Kalman 滤波及 Brown 的评分平滑保持不变。
+The risk that the background loop would run twice across a pause and resume was fixed. Inference now runs serially, and regression coefficients are cached when the training data have not changed. The red dot shows the latest model estimate. It is no longer an extra average of the last four frames. A prediction past the edge of the screen is not drawn as if it were on the edge. Removing that display smoothing can make the dot jump more. That is not an improvement in accuracy. The model's own Kalman filter, and the smoothing inside Brown's score, are unchanged.
 
-`inference_duration_ms` 和恢复页里的推理耗时统计可定位软件计算瓶颈；它们不包括完整的摄像头曝光、采集和屏幕呈现延迟。本机真实回归代码＋合成眼部图像测试：12 次预测未缓存约 19.6 ms、缓存约 11.1 ms，输出坐标完全相同。这不是本人的实测追踪延迟；用户报告的真人偏移仍未得到原始 session／观察验证。
+`inference_duration_ms`, and the inference-time summary on the recovery page, locate a software bottleneck. They do not include camera exposure, capture, or the delay before a pixel is on the screen. On this machine, the real regression code with synthetic eye images took about 19.6 ms uncached and about 11.1 ms cached across 12 predictions, and the output coordinates were identical. That is not a measured tracking delay for a person. The live offset that was reported has not been checked against a raw session or a direct observation.
 
-## 8. 本次检查及未覆盖范围
+## 8. What this check covered, and what it did not
 
-可复现的测试记录见 [VERIFICATION.md](docs/VERIFICATION.md)。测试覆盖 Brown 算式、Latin square 平衡、晚到预测隔离、异常 promise、缺失／重复记录、时间窗计时、播放结束／拒绝／超时和浏览器保存流程。它证明这些已测情形得到处理，**不能证明所有风险都被彻底预防**。正式招募前应冻结版本、完成上述四项研究检查，并至少演练一次真实设备的全流程、切页／退出和数据恢复。
+The reproducible test record is in [VERIFICATION.md](docs/VERIFICATION.md). The tests cover the Brown formula, Latin-square balance, isolation of late predictions, rejected promises, missing and duplicate records, window timing, playback end, rejection, and timeout, and the browser save path. They show that those cases are handled. **They do not show that every risk has been closed.** Before formal recruitment, freeze the version, finish the four research checks above, and run the full procedure at least once on the real device, including a tab switch, a quit, and a data recovery.

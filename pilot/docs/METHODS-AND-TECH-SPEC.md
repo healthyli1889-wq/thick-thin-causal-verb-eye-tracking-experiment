@@ -9,7 +9,7 @@
 
 ## 1. Study question and scope
 
-The linked [study document](https://docs.google.com/document/d/1w14ctG9VVMLFM2qofqnmD1T8KECe4B4O6ZSwTBsnmyg/edit) was read across all eight tabs, including nested meeting tabs; the first tab was empty. The populated tabs were Experiment Design v2, Meeting 8/27, eye tracking & pilot, Meeting 9/3, Pilot subject test, 标签页 7, and 标签页 8 (Meeting 9/28). Earlier material discussed process versus result; the recent four-event pilot asks about distal versus proximal causes. They are distinct contrasts and should not be merged in the analysis.
+The linked [study document](https://docs.google.com/document/d/1w14ctG9VVMLFM2qofqnmD1T8KECe4B4O6ZSwTBsnmyg/edit) was read across all eight tabs, including nested meeting tabs; the first tab was empty. The populated tabs were Experiment Design v2, Meeting 8/27, eye tracking & pilot, Meeting 9/3, Pilot subject test, Tab 7, and Tab 8 (Meeting 9/28). Tab 7 and Tab 8 still carry Google Docs' default untitled names in the source document. Earlier material discussed process versus result; the recent four-event pilot asks about distal versus proximal causes. They are distinct contrasts and should not be merged in the analysis.
 
 Working RQ: **After viewing a causal event, does causal wording change the relative attention (operationalized as eye gazing direction) allocated to the distal and proximal causal candidates?** 
 

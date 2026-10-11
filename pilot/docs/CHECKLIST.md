@@ -1,39 +1,41 @@
-# 当前验收清单
+# Current acceptance checklist
 
-版本：pilot-2.4.1 / schema 3.5.0。按用户最新澄清验收：**保留四个几何 minimalist 无声视频 bend、break、crack、split；独立音频为 cause to X / X；每场景两种条件均呈现。** 不替换为人物视频，不改成完整口语句子。下表“通过”仅限列出的检查范围。
+Version: pilot-2.4.1 / schema 3.5.0. Accepted against the latest clarification: **keep the four silent geometric videos bend, break, crack, and split; the separate audio is `cause to X` / `X`; both conditions are shown in every scene.** Do not replace these with the person videos, and do not turn the phrases into full spoken sentences. "Passed" in the table below means only the check that is named.
 
-## 已实现并检查
+From pilot-2.6.0 the accuracy numbers are recorded and do not stop a session. That policy is in the [README](../README.md). The rows here are the 2.4.1 acceptance record, including the score ≥ 75 check that was a gate at the time.
 
-| 用户要求／风险 | 结论 | 验证依据与边界 |
+## Implemented and checked
+
+| Request or risk | Result | Evidence, and where it stops |
 |---|---|---|
-| 标题与首屏说明 | 保留 | `index.html`、`experiment.js`：Pilot Sessions；首屏正文仅用户指定的一句 |
-| 四个几何无声视频 | 通过文件检查 | `stimuli.js` 引用四个既有几何视频；`scripts/check.mjs` 核对四个 verb、视频无音轨、完整解码、每个文件实际时长／帧数与配置一致；不使用人物版本 |
-| 独立 X / cause to X 音频 | 文件、配置及播放检查通过 | 八个独立 MP3，词语配置逐项检查；保留既有录音，不改完整句子。逐字听审和词起点的证据缺口见下表 |
-| 每场景视频→X→音频→问题→回答，两轮 probe | 浏览器流程通过 | 每场景视频一次、两段音频、两次独立回答；每个 probe 有 X 和图片预览；4 video / 8 audio / 8 choice 的顺序断言 |
-| 不同被试 counterbalance、Latin square | 分配算法通过 | Williams 四行：位置与有向相邻视频对平衡；交叉镜像和首词条件共 16 单元；每人两场景 thick-first、两场景 thin-first。实际发放编号、退出后的完成样本平衡仍须研究者管理 roster |
-| Brown measurement 算式一致 | 算式通过 | 测试直接执行本地 Brown www 官方函数，对 100 组输入比较。不同引擎／设备下实际预测相同不在该结论内 |
-| 门槛 75 | 通过 | 配置为 score ≥75；单元测试 74／56 不通过，75 通过；模拟 75 分完整浏览器流程通过 |
-| Validation 红点 | 通过 | 采用 validation 本身的采样回调，无第二个推理循环；坐标、过期隐藏、移除及浏览器可见性均检查；记录 feedback-visible，不能称为无反馈验证 |
-| 整个场景后台 gaze，含作答和切换 | 实现及模拟记录通过 | 单一连续采样器；完整流程四个 segment，八次作答均有数据；空作答 gaze、漏 segment、重复时间戳、错误 phase 会被检测。真人掉样率未据此判合格 |
-| 不把回答绑定到错误音频／角色 | 新增检查并通过 | `auditRecords` 检查 probe_id、item、condition、音频成功播放、选项顺序、实际 response 与 selected_role 一致 |
-| Validation 推理报错不误判通过 | 已修复并测试 | 即使仍有足够有效点，推理错误也记入失败原因与诊断 |
-| 声音检查播放失败不死锁 | 已修复并测试 | 错误写入记录、重试后停止；不会永远停留在禁用的按钮；跳转到音频末尾不算完整听完 |
-| 摄像头失败／取消后能保存 | 已修复 | 插件拒绝启动会结束诊断 trial；加载／定位时可以结束保存；晚到的启动结果不会覆盖后续页面。单元测试及浏览器拒绝权限路径验证 |
-| 预载失败、实验音频拒绝播放、中途退出 | 浏览器路径通过 | 失败原因明确；不制造已完成 video／choice；恢复页可下载已保存记录及 partial 样本；刷新前再尝试保存当前 capture |
-| 结尾问卷 | 实现及完整流程通过 | 年龄、English background、专业、建议；光照、校准清晰度、视频自然度、负向音频难度各 1–7。没经历的阶段记 null＋exposure，而不是强迫评分 |
-| 无效 gaze 不伪装成停留／首次转移 | 新增回归检查通过 | NaN 预测结束前一观测的停留；丢失期间计 missing；首次持续注视前存在不可观测间隔时不输出确定的首次转移潜伏期 |
-| JSON → R / Python | 导出及读取通过 | 九张 CSV，明确关联键与单位；保存原始 JSON；空 viewport 不导致导出崩溃；错误 source session_id 保留并标记；导出重查字段完整性；拒绝重复 session_id |
-| 模拟／预览数据不能混成受试者回答 | 已修复并测试 | 导出保留模式，示例 R/Python 默认排除 preview 和 synthetic_test_data；测试者须显式使用 `--include-synthetic`，preview 仍不纳入 |
-| 文档中的材料与流程要求 | 已更正 | 撤回人物视频替换结论；撤回要求完整句子／改成每场景一种条件的措辞；根目录入口统一为 8765；标明 validation 红点可见 |
+| Title and opening text | Kept | `index.html` and `experiment.js`: Pilot Sessions. The opening body is the one sentence that was specified. |
+| Four silent geometric videos | Passed the file check | `stimuli.js` points at the four existing geometric videos. `scripts/check.mjs` checks the four verbs, confirms the videos have no audio track, decodes them fully, and matches each file's duration and frame count to the configuration. The person versions are not used. |
+| Separate `X` / `cause to X` audio | File, configuration, and playback checks passed | Eight separate MP3s. The word configuration was checked item by item. The existing recordings are kept, and they are not full sentences. The missing word-for-word listen-through and the missing word onsets are in the table below. |
+| Per scene: video → X → audio → question → response, two probes | Browser flow passed | One video per scene, two audio clips, two separate responses. Each probe has an X and a picture preview. The order assertion is 4 videos / 8 audio clips / 8 choices. |
+| Counterbalancing across participants, Latin square | Allocation algorithm passed | Four Williams rows: positions and ordered neighbouring video pairs are balanced. Crossing mirroring with the first-word condition gives 16 cells. Each person has two thick-first scenes and two thin-first scenes. Which numbers are actually issued, and whether the completed sample stays balanced after withdrawals, is still the researcher's roster to manage. |
+| Brown measurement formula matches | Formula passed | The test calls the local Brown `www` function directly and compares 100 inputs. This does not say that live predictions match across engines or devices. |
+| Threshold of 75 | Passed | Configured as score ≥ 75. Unit tests: 74 and 56 fail, 75 passes. A simulated full browser flow at a score of 75 passes. |
+| Validation red dot | Passed | Uses the sampling callback of validation itself. There is no second inference loop. Coordinates, hiding when stale, removal, and visibility in the browser were checked. The record is marked feedback-visible. It cannot be called validation without feedback. |
+| Background gaze for the whole scene, including the response and the transitions | Implementation and simulated records passed | One continuous sampler. A full run has four segments, and all eight responses have data. Empty response gaze, a missing segment, a repeated timestamp, and a wrong phase are detected. A live sample-loss rate is not certified by this. |
+| Responses are not bound to the wrong audio or the wrong character | New check, passed | `auditRecords` checks `probe_id`, item, condition, successful audio playback, option order, and that the actual response matches `selected_role`. |
+| An inference error during validation is not scored as a pass | Fixed and tested | Even when enough valid points remain, an inference error is written into the failure reason and the diagnostics. |
+| A failed sound check does not deadlock | Fixed and tested | The error is written to the record, and the session stops after the retry. It does not sit forever on a disabled button. Seeking to the end of the clip does not count as having heard it. |
+| A save is still possible after the camera fails or is cancelled | Fixed | If the plugin refuses to start, the diagnostic trial ends. A save can be finished during loading or positioning. A late start result does not overwrite a later page. Covered by a unit test and by the browser path that rejects permission. |
+| Preload failure, study audio refused, leaving mid-session | Browser paths passed | The failure reason is explicit. Finished video or choice records are not invented. The recovery page can download what was saved, including partial samples. One more save of the current capture is attempted before refresh. |
+| End questionnaire | Implementation and full flow passed | Age, English background, major, and suggestions, plus lighting, calibration clarity, video naturalness, and negatively worded audio difficulty, each on 1–7. A stage that was not reached is stored as null plus exposure, rather than a forced rating. |
+| Invalid gaze is not dressed up as dwell or as a first shift | New regression check, passed | A NaN prediction ends the dwell of the previous observation. The gap is counted as missing. If there is an unobserved interval before the first sustained look, no definite first-shift latency is emitted. |
+| JSON to R / Python | Export and read-back passed | Nine CSVs, with explicit join keys and units. The raw JSON is kept. An empty viewport does not crash the export. A wrong source `session_id` is kept and flagged. The export rechecks field integrity. A duplicate `session_id` is refused. |
+| Simulated or preview data cannot be mixed in as participant responses | Fixed and tested | The export keeps the mode. The example R and Python summaries exclude preview and `synthetic_test_data` by default. A tester has to pass `--include-synthetic` on purpose. Preview is still left out. |
+| Materials and procedure as described in the docs | Corrected | The conclusion that person videos should replace these files is withdrawn. Wording that required full sentences, or one condition per scene, is withdrawn. The root entry point is unified on port 8765. Validation is marked as showing the red dot. |
 
-## 仍不能勾选“完成”的项目
+## Still cannot be marked done
 
-| 项目 | 当前证据缺口 | 完成条件 |
+| Item | Evidence that is still missing | What would close it |
 |---|---|---|
-| 你本人报告的 56 分、红点偏移和明显延迟已解决 | 未取得该次原始 session，未在你的实际摄像头与注视下验证修复后的误差／延迟 | 查看实际 session 诊断，并做真实设备定位和延迟复测；75 分门槛不是准确度证明 |
-| 两个角色的 AOI 可可靠区分 | 目前仍为近似角色中心和左右空间划分，geometryValidated=false；200 px 验证容差不能证明角色可分 | 对这四个几何场景逐项核对角色 AOI，并验证注视两角色的可分辨率；不能用通过 calibration 替代 |
-| 八段音频逐字听审、词起点与声学时序已验证 | 已核对文件和声明文本，但没有独立听审／人工词边界记录；word_onset_ms 为 null，耳机声学起点未测 | 保持既定 X / cause to X 形式，补逐字核验及词边界证据；如做 word-locked 分析需相应时序验证。当前仅可做有标记的 phase-level 探索分析 |
-| 所有保存风险已被预防／已有远程后端 | 当前是浏览器 IndexedDB＋本地 JSON；没有远程上传确认。强制杀进程、磁盘／浏览器清理、存储配额不足的真实设备故障不能据上述测试宣布完全覆盖 | 本地操作须实际接收并保管 JSON；若需要远程收集，则另需实现并验证持久化服务及上传确认 |
-| 已满足正式研究的推论与统计要求 | 四个重复 item 的局限、目标样本量／功效、分析窗、剔除规则和模型尚未形成完整冻结方案 | 保持用户指定流程，确定适合该设计的分析计划与限制；软件运行成功不替代研究有效性证据 |
+| The reported score of 56, the red-dot offset, and the obvious delay are resolved | That raw session was never obtained, and the error and latency after the fix have not been checked on the actual camera and the actual gaze | Inspect the real session diagnostics, and repeat the localisation and latency measurement on the real device. A threshold of 75 is not a proof of accuracy. |
+| The two characters' AOIs can be told apart reliably | Still approximate character centres and a left/right spatial split, with `geometryValidated=false`. A 200 px validation tolerance does not show that the characters are separable. | Check the character AOI in each of the four geometric scenes, and test how well looks to the two characters can be resolved. Passing calibration is not a substitute. |
+| Word-for-word review of the eight recordings, word onsets, and acoustic timing are verified | Files and the declared text have been checked. There is no independent listen-through and no hand-marked word boundary. `word_onset_ms` is null. Acoustic onset at the earphone has not been measured. | Keep the specified `X` / `cause to X` forms. Add the word-for-word check and the word-boundary evidence. A word-locked analysis needs the matching timing validation. Only flagged, phase-level exploration is appropriate now. |
+| Every save risk has been prevented, or a remote backend exists | The store is browser IndexedDB plus a local JSON file. There is no confirmed remote upload. A forced process kill, a disk or browser wipe, or a real device that runs out of storage quota is not fully covered by the tests above. | Local running means the JSON has to be received and kept. Remote collection would need its own persistent service, and a confirmed upload, both implemented and tested. |
+| The inferential and statistical requirements of a confirmatory study are met | The limit of four repeated items, the target sample and power, the analysis window, the exclusion rules, and the model are not yet a frozen plan. | Keep the procedure that was specified. Settle an analysis plan that fits this design, and state its limits. A program that runs is not evidence that the study is valid. |
 
-当前结论：**软件流程可以继续技术预实验；不能声明真人准确度已解决或正式研究全部验收完成。** 可复现命令及逐次记录见 [VERIFICATION](VERIFICATION.md)。未完成项必须保留，不能通过修改阈值、重命名素材或删除 QC 标记变成“通过”。
+**The software can carry a technical pilot. It cannot be said that live accuracy is solved, or that a confirmatory study has passed every acceptance check.** Reproducible commands and the run-by-run record are in [VERIFICATION](VERIFICATION.md). Open items stay open. They do not become "passed" by moving a threshold, renaming a stimulus, or deleting a QC flag.
