@@ -1,0 +1,403 @@
+{
+  "generated_at": "2026-10-03T11:24:51.303916+00:00",
+  "note": "Synthetic browser QA and camera-free preview; no participant accuracy evidence. Camera rejection injected into the real plugin. Completed paths verified JSON download and recovery; interrupt verified a recovery download.",
+  "results": [
+    {
+      "mode": "brown75",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 62,
+      "stage_counts": {
+        "welcome": 1,
+        "browser-check": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "setup-questionnaire": 1,
+        "audio-check": 1,
+        "audio-gate": 1,
+        "camera-instructions": 1,
+        "camera-init": 1,
+        "calibration-instructions": 1,
+        "calibration": 1,
+        "initial-validation-instructions": 1,
+        "brown-measurement": 3,
+        "validation": 3,
+        "validation-gate": 3,
+        "task-instructions": 1,
+        "video": 4,
+        "fixation": 8,
+        "preview": 8,
+        "audio-gaze": 8,
+        "choice": 8,
+        "midpoint-validation-instructions": 1,
+        "final-validation-instructions": 1,
+        "feedback": 1,
+        "debrief": 1
+      },
+      "complete": true,
+      "flow_complete": true,
+      "stop_reason": null,
+      "data_integrity": {
+        "ledger_mismatch": [],
+        "pass": true,
+        "missing": [],
+        "duplicates": [],
+        "unfinished": [],
+        "unkeyed": 0,
+        "expected": 48,
+        "observed": 62,
+        "trial_index_policy": "indices need not be contiguous; check logical IDs and start/finish ledger"
+      },
+      "record_integrity": {
+        "pass": true,
+        "errors": []
+      },
+      "continuous_integrity": {
+        "pass": true,
+        "applicable": true,
+        "errors": [],
+        "samples": 1357,
+        "segments": 4
+      },
+      "partial_samples": 0
+    },
+    {
+      "mode": "preview",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 45,
+      "stage_counts": {
+        "welcome": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "setup-questionnaire": 1,
+        "audio-check": 1,
+        "audio-gate": 1,
+        "task-instructions": 1,
+        "video": 4,
+        "fixation": 8,
+        "preview": 8,
+        "audio-gaze": 8,
+        "choice": 8,
+        "feedback": 1,
+        "debrief": 1
+      },
+      "complete": false,
+      "flow_complete": true,
+      "stop_reason": null,
+      "data_integrity": {
+        "ledger_mismatch": [],
+        "pass": true,
+        "missing": [],
+        "duplicates": [],
+        "unfinished": [],
+        "unkeyed": 0,
+        "expected": 43,
+        "observed": 45,
+        "trial_index_policy": "indices need not be contiguous; check logical IDs and start/finish ledger"
+      },
+      "record_integrity": {
+        "pass": true,
+        "errors": []
+      },
+      "continuous_integrity": {
+        "pass": true,
+        "applicable": false,
+        "errors": []
+      },
+      "partial_samples": 0
+    },
+    {
+      "mode": "validation-error",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 29,
+      "stage_counts": {
+        "welcome": 1,
+        "browser-check": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "setup-questionnaire": 1,
+        "audio-check": 1,
+        "audio-gate": 1,
+        "camera-instructions": 1,
+        "camera-init": 1,
+        "calibration-instructions": 1,
+        "calibration": 3,
+        "initial-validation-instructions": 1,
+        "brown-measurement": 3,
+        "validation": 3,
+        "initial-coaching-2": 1,
+        "camera-reposition": 2,
+        "initial-look-only-2": 1,
+        "initial-coaching-3": 1,
+        "initial-look-only-3": 1,
+        "validation-gate": 1,
+        "feedback": 1,
+        "debrief": 1
+      },
+      "complete": false,
+      "flow_complete": false,
+      "stop_reason": "initial-validation-failed",
+      "data_integrity": {
+        "ledger_mismatch": [],
+        "pass": true,
+        "missing": [],
+        "duplicates": [],
+        "unfinished": [],
+        "unkeyed": 0,
+        "expected": 29,
+        "observed": 29,
+        "trial_index_policy": "indices need not be contiguous; check logical IDs and start/finish ledger"
+      },
+      "record_integrity": {
+        "pass": true,
+        "errors": []
+      },
+      "continuous_integrity": {
+        "pass": true,
+        "applicable": true,
+        "errors": [],
+        "samples": 0,
+        "segments": 0
+      },
+      "partial_samples": 0
+    },
+    {
+      "mode": "sound-error",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 11,
+      "stage_counts": {
+        "welcome": 1,
+        "browser-check": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "setup-questionnaire": 1,
+        "audio-check": 2,
+        "audio-coaching": 1,
+        "audio-gate": 1,
+        "feedback": 1,
+        "debrief": 1
+      },
+      "complete": false,
+      "flow_complete": false,
+      "stop_reason": "audio-check-failed",
+      "data_integrity": {
+        "ledger_mismatch": [],
+        "pass": true,
+        "missing": [],
+        "duplicates": [],
+        "unfinished": [],
+        "unkeyed": 0,
+        "expected": 11,
+        "observed": 11,
+        "trial_index_policy": "indices need not be contiguous; check logical IDs and start/finish ledger"
+      },
+      "record_integrity": {
+        "pass": true,
+        "errors": []
+      },
+      "continuous_integrity": {
+        "pass": true,
+        "applicable": true,
+        "errors": [],
+        "samples": 0,
+        "segments": 0
+      },
+      "partial_samples": 0
+    },
+    {
+      "mode": "audio-fail",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 22,
+      "stage_counts": {
+        "welcome": 1,
+        "browser-check": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "setup-questionnaire": 1,
+        "audio-check": 1,
+        "audio-gate": 1,
+        "camera-instructions": 1,
+        "camera-init": 1,
+        "calibration-instructions": 1,
+        "calibration": 1,
+        "initial-validation-instructions": 1,
+        "brown-measurement": 1,
+        "validation": 1,
+        "validation-gate": 1,
+        "task-instructions": 1,
+        "video": 1,
+        "fixation": 1,
+        "preview": 1,
+        "audio-gaze": 1,
+        "feedback": 1,
+        "debrief": 1
+      },
+      "complete": false,
+      "flow_complete": false,
+      "stop_reason": "audio-play-rejected",
+      "data_integrity": {
+        "ledger_mismatch": [],
+        "pass": true,
+        "missing": [],
+        "duplicates": [],
+        "unfinished": [],
+        "unkeyed": 0,
+        "expected": 22,
+        "observed": 22,
+        "trial_index_policy": "indices need not be contiguous; check logical IDs and start/finish ledger"
+      },
+      "record_integrity": {
+        "pass": false,
+        "errors": [
+          {
+            "id": "path-break-thin-audio",
+            "reason": "missing-gaze"
+          },
+          {
+            "id": "path-break-thin-audio",
+            "reason": "incomplete-audio-record"
+          }
+        ]
+      },
+      "continuous_integrity": {
+        "pass": true,
+        "applicable": true,
+        "errors": [],
+        "samples": 136,
+        "segments": 1
+      },
+      "partial_samples": 0
+    },
+    {
+      "mode": "preload-fail",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 6,
+      "stage_counts": {
+        "welcome": 1,
+        "browser-check": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "feedback": 1,
+        "debrief": 1
+      },
+      "complete": false,
+      "flow_complete": false,
+      "stop_reason": "preload-failed",
+      "data_integrity": {
+        "ledger_mismatch": [],
+        "pass": true,
+        "missing": [],
+        "duplicates": [],
+        "unfinished": [],
+        "unkeyed": 0,
+        "expected": 6,
+        "observed": 6,
+        "trial_index_policy": "indices need not be contiguous; check logical IDs and start/finish ledger"
+      },
+      "record_integrity": {
+        "pass": true,
+        "errors": []
+      },
+      "continuous_integrity": {
+        "pass": true,
+        "applicable": true,
+        "errors": [],
+        "samples": 0,
+        "segments": 0
+      },
+      "partial_samples": 0
+    },
+    {
+      "mode": "interrupt",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 19,
+      "stage_counts": {
+        "welcome": 1,
+        "browser-check": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "setup-questionnaire": 1,
+        "audio-check": 1,
+        "audio-gate": 1,
+        "camera-instructions": 1,
+        "camera-init": 1,
+        "calibration-instructions": 1,
+        "calibration": 1,
+        "initial-validation-instructions": 1,
+        "brown-measurement": 1,
+        "validation": 1,
+        "validation-gate": 1,
+        "task-instructions": 1,
+        "video": 1,
+        "fixation": 1,
+        "preview": 1
+      },
+      "complete": null,
+      "flow_complete": null,
+      "stop_reason": null,
+      "data_integrity": null,
+      "record_integrity": null,
+      "continuous_integrity": null,
+      "partial_samples": 3
+    },
+    {
+      "mode": "camera-error",
+      "script_pass": true,
+      "study_version": "pilot-2.4.1",
+      "synthetic_test_data": true,
+      "rows": 11,
+      "stage_counts": {
+        "welcome": 1,
+        "browser-check": 1,
+        "fullscreen": 1,
+        "preload": 1,
+        "setup-questionnaire": 1,
+        "audio-check": 1,
+        "audio-gate": 1,
+        "camera-instructions": 1,
+        "camera-init": 1,
+        "feedback": 1,
+        "debrief": 1
+      },
+      "complete": false,
+      "flow_complete": false,
+      "stop_reason": "camera-start-failed",
+      "data_integrity": {
+        "ledger_mismatch": [],
+        "pass": true,
+        "missing": [],
+        "duplicates": [],
+        "unfinished": [],
+        "unkeyed": 0,
+        "expected": 11,
+        "observed": 11,
+        "trial_index_policy": "indices need not be contiguous; check logical IDs and start/finish ledger"
+      },
+      "record_integrity": {
+        "pass": true,
+        "errors": []
+      },
+      "continuous_integrity": {
+        "pass": true,
+        "applicable": true,
+        "errors": [],
+        "samples": 0,
+        "segments": 0
+      },
+      "partial_samples": 0
+    }
+  ]
+}

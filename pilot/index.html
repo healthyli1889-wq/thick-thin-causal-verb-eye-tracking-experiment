@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pilot Sessions</title><link rel="stylesheet" href="vendor/jspsych.css"><link rel="stylesheet" href="styles.css?v=2.6.3">
+<script src="vendor/jspsych.js"></script>
+<script src="vendor/plugin-html-button-response.js"></script><script src="vendor/plugin-html-keyboard-response.js"></script>
+<script src="vendor/plugin-survey-html-form.js"></script><script src="vendor/plugin-browser-check.js"></script>
+<script src="vendor/plugin-fullscreen.js"></script><script src="vendor/plugin-preload.js"></script>
+<script src="vendor/webgazer.js?v=2.6.1"></script><script src="vendor/extension-webgazer.js"></script>
+<script src="vendor/plugin-webgazer-init-camera.js"></script><script src="vendor/plugin-webgazer-calibrate.js?v=2.6.1"></script><script src="vendor/plugin-webgazer-validate.js?v=2.6.1"></script>
+</head><body><main id="jspsych-target"></main><noscript>JavaScript is required.</noscript>
+<script type="module">
+const allocation=Number(new URLSearchParams(location.search).get('allocation'));
+if(Number.isSafeInteger(allocation)&&allocation>0){import('./src/experiment.js?v=2.6.3').catch(e=>{document.querySelector('#jspsych-target').textContent='Could not start: '+e.message;});}
+else document.querySelector('#jspsych-target').innerHTML='<section class="study-copy"><h1>Pilot Sessions</h1><p>Use the next allocation number from the study roster. Record the session ID against that number after completion.</p><form><label>Allocation number <input name="allocation" type="number" min="1" step="1" required></label><button>Start technical pilot</button></form><p><a href="?allocation=1&mode=preview">Preview full session (no camera)</a> · <a href="preview.html">Inspect materials</a> · <a href="recovery.html">Recover saved sessions</a></p></section>';
+</script></body></html>

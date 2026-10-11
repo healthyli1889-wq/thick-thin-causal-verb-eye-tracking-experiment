@@ -1,0 +1,12 @@
+{
+  "name": "causal-gaze-pilot-v2",
+  "version": "2.6.3",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "build": "node scripts/build-manifest.mjs",
+    "check": "node scripts/check.mjs",
+    "verify": "npm test && npm run check"
+  }
+}

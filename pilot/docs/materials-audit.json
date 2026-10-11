@@ -1,0 +1,404 @@
+{
+  "scope": "Workspace materials recursively, active study video/audio assets, and byte comparison to archived pilot assets",
+  "audio_content_status": "Embedded audio streams and nonzero signal verified; spoken wording not transcribed or independently verified",
+  "runtime_assets_are_materials_originals": false,
+  "files": [
+    {
+      "path": "materials/cause and burn_5 pairs_pilot/split/output (1).mp4",
+      "sha256": "4b5747dcacb8b81fc4164c4e4560f4994d5da970b6e50358e944bd4b4bc824ab",
+      "duration_s": "8.064000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "hevc",
+          "codec_type": "video",
+          "width": 1920,
+          "height": 1080,
+          "r_frame_rate": "24/1",
+          "duration": "8.041667"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "32000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "duration": "8.064000"
+        }
+      ],
+      "identical_old_asset": null,
+      "decode_pass": true
+    },
+    {
+      "path": "materials/cause and burn_5 pairs_pilot/split/output.mp4",
+      "sha256": "975a99022bede3806090f4a6649c1f6b85890e3df7605c18624b864ce1a7f028",
+      "duration_s": "5.056000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "hevc",
+          "codec_type": "video",
+          "width": 1920,
+          "height": 1080,
+          "r_frame_rate": "24/1",
+          "duration": "5.041667"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "32000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "duration": "5.056000"
+        }
+      ],
+      "identical_old_asset": null,
+      "decode_pass": true
+    },
+    {
+      "path": "materials/cause and burn_5 pairs_pilot/crack/output (4).mp4",
+      "sha256": "26f5d0839f674ed4b8779a71d1a8c19978179ca53998741fa42f3258f5e548e1",
+      "duration_s": "7.072000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "24/1",
+          "duration": "7.041667"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "32000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "duration": "7.072000"
+        }
+      ],
+      "identical_old_asset": null,
+      "decode_pass": true
+    },
+    {
+      "path": "materials/cause and burn_5 pairs_pilot/break/output (4).mp4",
+      "sha256": "d6659e671b93cff06b5b812e1312b77104c8c650e7d35a5104e30e8863b2477b",
+      "duration_s": "5.056000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "hevc",
+          "codec_type": "video",
+          "width": 1920,
+          "height": 1080,
+          "r_frame_rate": "24/1",
+          "duration": "5.041667"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "32000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "duration": "5.056000"
+        }
+      ],
+      "identical_old_asset": null,
+      "decode_pass": true
+    },
+    {
+      "path": "materials/cause and burn_5 pairs_pilot/break/output (3).mp4",
+      "sha256": "d6659e671b93cff06b5b812e1312b77104c8c650e7d35a5104e30e8863b2477b",
+      "duration_s": "5.056000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "hevc",
+          "codec_type": "video",
+          "width": 1920,
+          "height": 1080,
+          "r_frame_rate": "24/1",
+          "duration": "5.041667"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "32000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "duration": "5.056000"
+        }
+      ],
+      "identical_old_asset": null,
+      "decode_pass": true
+    },
+    {
+      "path": "materials/cause and burn_5 pairs_pilot/bent/output (2).mp4",
+      "sha256": "f3c1e20a945b9f3b739cac0abe773f7408e523bcff93621e7ee93ca47b248ec7",
+      "duration_s": "7.072000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "hevc",
+          "codec_type": "video",
+          "width": 1920,
+          "height": 1080,
+          "r_frame_rate": "24/1",
+          "duration": "7.041667"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "32000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "duration": "7.072000"
+        }
+      ],
+      "identical_old_asset": null,
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thick-crack.mp3",
+      "sha256": "bc6c18b9ea29d8502173ac3016f5134de0cb73246f427985014abe9a390c1671",
+      "duration_s": "0.466188",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.466187"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thick-crack.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thick-bend.mp3",
+      "sha256": "fd19d062654c602dd42779a03160afd528648da2e762b29439e9dcc7a0ddd1fb",
+      "duration_s": "0.371438",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.371437"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thick-bend.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thin-break.mp3",
+      "sha256": "e6067465b794244ca57ec29d90e72c542b92f2aee5c347fea5ebd7f5c555b3f1",
+      "duration_s": "0.847271",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.847271"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thin-break.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thin-split.mp3",
+      "sha256": "b4e63f21c4fe27ba6871ce7504661564ca5044c2a7924663eef4815d7a1acc7d",
+      "duration_s": "0.870479",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.870479"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thin-split.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thin-crack.mp3",
+      "sha256": "6adbfbab22aacb00e1c7a762dd329f4d2f9f69dfff2bd5d37c492d65a7809038",
+      "duration_s": "0.893708",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.893708"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thin-crack.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thick-break.mp3",
+      "sha256": "29e04169afb8a3b9610674a2aaa5b577827910bb02445eb203ce872246f5fa3f",
+      "duration_s": "0.417875",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.417875"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thick-break.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thin-bend.mp3",
+      "sha256": "7aaf45e226431f1a24bcb8508e9f326787db7847f0e42e81299f45042de4710b",
+      "duration_s": "0.812438",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.812438"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thin-bend.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/speech-check.wav",
+      "sha256": "2fc79595440e797eae0d0f102641dcdd7fbc000a087f29206f6eba19e0062f62",
+      "duration_s": "0.490476",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "pcm_s16le",
+          "codec_type": "audio",
+          "sample_rate": "44100",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.490476"
+        }
+      ],
+      "identical_old_asset": null,
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/audio/verb-thick-split.mp3",
+      "sha256": "b9e2503105c413d701dbef0b90eacd5bef7d1f7a6a9f5598b39648f3f0eaf95e",
+      "duration_s": "0.525313",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "mp3",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 1,
+          "r_frame_rate": "0/0",
+          "duration": "0.525312"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/audio/verb-thick-split.mp3",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/event/items/car-bend.mp4",
+      "sha256": "981e1eb88d915a74ca23fff79b91148f9b6f8bd174cc2589795f6b88b82d31f7",
+      "duration_s": "4.000000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "24/1",
+          "duration": "4.000000"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/event/items/car-bend.mp4",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/event/items/path-break.mp4",
+      "sha256": "f57a0a85b0c983f84ff0b1dcee8b1f05a024e76a9e3eea3ee5d170ee9e643bfd",
+      "duration_s": "4.000000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "24/1",
+          "duration": "4.000000"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/event/items/path-break.mp4",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/event/items/juice-split-v050.mp4",
+      "sha256": "c3af9b7e3c6f9b6649e733030c5d6e3bd947002da048bd4d3192d1c4e578fee0",
+      "duration_s": "4.000000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "24/1",
+          "duration": "4.000000"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/event/items/juice-split-v050.mp4",
+      "decode_pass": true
+    },
+    {
+      "path": "pilot_v2.0/study/assets/event/items/painting-crack.mp4",
+      "sha256": "548de502c6e683557929f0b0ea79a09f4dc89718c29e77a771cfea5ebfbf3d8b",
+      "duration_s": "4.000000",
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "24/1",
+          "duration": "4.000000"
+        }
+      ],
+      "identical_old_asset": "pilot/holistic/causal-eye-tracking-pilot-package/fence-chain-pilot/assets/event/items/painting-crack.mp4",
+      "decode_pass": true
+    }
+  ],
+  "interpretation_correction": "User confirmed current geometric silent videos and separate cause to X / X format. Lack of identity with other materials videos is not a source-selection failure."
+}

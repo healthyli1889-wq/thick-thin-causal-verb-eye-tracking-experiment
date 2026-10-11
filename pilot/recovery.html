@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Recover pilot sessions</title><link rel="stylesheet" href="styles.css">
+<main class="study-copy"><h1>Saved sessions on this browser</h1><p>Recovery downloads contain the saved rows and session ledger, including incomplete sessions. Data stay on this device. A crash can lose the current unfinished trial.</p><div id="sessions"></div></main>
+<script type="module">
+import {calibrationReport} from './src/calibration-report.js';
+import {recoveredSessions,download} from './src/storage.js';
+const el=document.querySelector('#sessions');try{const sessions=await recoveredSessions();
+el.textContent=sessions.length?'':'No saved sessions in this browser.';
+for(const s of sessions){const b=document.createElement('button');b.textContent=`${s.session.mode==='preview'?'[PREVIEW — no gaze] ':''}${s.updated_at} — ${s.rows.length} rows — ${s.session_id}`;b.onclick=()=>download(s,`recovered-${s.session_id}.json`);el.append(b);const details=document.createElement('details'),summary=document.createElement('summary'),pre=document.createElement('pre');summary.textContent='Calibration diagnostics';pre.textContent=JSON.stringify(calibrationReport(s),null,2);details.append(summary,pre);el.append(details);}}
+catch(e){el.textContent=`Recovery unavailable: ${e.message}`;}
+</script></html>

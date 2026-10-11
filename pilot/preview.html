@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Camera-free media QA</title><link rel="stylesheet" href="styles.css">
+<section class="study-copy"><h1>Media and AOI inspection</h1><p>Camera-free researcher preview. The outlined sides are exploratory; their geometry has not been validated.</p>
+<p><a href="?allocation=1&mode=preview">Run all four scenarios and the final questionnaire (no camera)</a></p>
+<select id="item"></select><select id="layout"><option>standard</option><option>mirrored</option></select>
+<button id="play">Play video</button><button id="tableau">Show tableau and AOIs</button><div id="audio-review"></div><pre id="result"></pre></section><div id="display"></div>
+<script type="module">
+import {ITEMS,stageHtml,geometry} from './src/stimuli.js';import {observeVideo,rectOf} from './src/media.js';
+const item=document.querySelector('#item'),layout=document.querySelector('#layout'),display=document.querySelector('#display'),result=document.querySelector('#result');let watcher=null;
+for(const i of ITEMS){const option=document.createElement('option');option.value=i.id;option.textContent=i.id;item.append(option);}
+function showAudio(){const i=ITEMS.find(i=>i.id===item.value);document.querySelector('#audio-review').innerHTML=['thick','thin'].map(c=>`<p><strong>${c}</strong>: ${i.audio[c].spoken}<br>Question: ${c==='thick'?i.thickQuestion:i.thinQuestion}<br><audio controls preload="metadata" src="${i.audio[c].file}"></audio></p>`).join('')+`<p>Options: The ${i.distal} / The ${i.proximal}. Transcript and word onsets still require independent review.</p>`;}
+item.addEventListener('change',showAudio);showAudio();
+document.querySelector('#play').onclick=()=>{watcher?.cancel();display.innerHTML=stageHtml(ITEMS.find(i=>i.id===item.value),layout.value,true);result.textContent='Playing…';
+ watcher=observeVideo(document.querySelector('video'),{onDone:log=>{window.lastPlayback=log;result.textContent=JSON.stringify(log,null,2);}});};
+document.querySelector('#tableau').onclick=()=>{watcher?.cancel();const i=ITEMS.find(i=>i.id===item.value);display.innerHTML=stageHtml(i,layout.value);const stage=document.querySelector('#stage');
+ const g=geometry(i,layout.value,rectOf(stage));for(const r of g.regions){const box=document.createElement('div');box.className='qa-label';box.style.left=`${r.left-g.stage.left}px`;box.style.width=`${r.right-r.left-4}px`;box.style.height=`${g.stage.height-12}px`;box.textContent=r.role;stage.append(box);}
+ result.textContent=JSON.stringify(g,null,2);};
+</script></html>
